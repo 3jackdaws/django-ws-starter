@@ -1,0 +1,23 @@
+version: '3'
+
+services:
+  web:
+    build: .
+    volumes:
+      - .:/app
+    depends_on:
+      - broker
+
+
+  proxy:
+    build: docker/nginx/.
+    volumes:
+      - './docker/nginx/nginx.conf:/etc/nginx/conf.d/nginx.conf'
+      - './docker/static:/static'
+    ports:
+      - '80:80'
+    depends_on:
+      - web
+
+  broker:
+    image: 'redis:alpine'
